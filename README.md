@@ -17,7 +17,43 @@ Radiology reports are crucial for clinical decision-making but often contain unc
 
 ## Data Resources
 
-We publish Lunguage++, an expanded version of [Lunguage](https://arxiv.org/abs/2505.21190). The meaning of the relevant columns is the following. The columns that are added in Lunguage++ (by our explicit and implicit uncertainty pipelines) are shown in **bold**. 
+Should you want to run the code in this repository, the `data_resources` folder should have the following structure: 
+<pre>
+data_resources/
+├── evaluation_study/
+│   ├── expert_participant_info.csv
+│   └── expert_phrase_comparisons.csv
+│   └── survey_uncertainty.pdf
+├── hedging_phrase_comparisons/
+│   └── comparisons_claude.jsonl
+│   └── comparisons_gemini.jsonl   
+│   └── comparisons_gpt.jsonl
+│   └── comparisons_medgemma.jsonl
+├── lunguage/
+│   └── Lunguage.csv
+│   └── Lunguage_vocab.csv
+│   └── mimic-cxr-2.0.0-metadata.csv
+├── ranking_log/
+│   ├── llm_logs/
+│   │   └── example.jsonl
+│   ├── ranker_logs/
+│   │   └── example.csv
+│   └── rank_sentence_log.jsonl
+├── Lunguage++.csv
+├── Lunguage_w_prob.csv
+├── dx_pathway.csv
+├── hedging_phrase_extracted.jsonl
+├── hedging_phrase_vocab.jsonl
+└── reference_ranking.csv
+</pre>
+
+The data in these folders can be downloaded from Physionet (**Our dataset is currently awaiting approval for publication by Physionet**).
+The data in `data_resources/lunguage` can be downloaded from the Physionet project for Lunguage (**The Lunguage dataset is currently awaiting approval for publication by Physionet**).
+The metadata file `mimic-cxr-2.0.0-metadata.csv` can be downloaded from [MIMIC-CXR-JPG](https://physionet.org/content/mimic-cxr/2.0.0/).
+
+What follows is a description of our dataset.
+
+We publish Lunguage++ on Physionet, an expanded version of [Lunguage](https://arxiv.org/abs/2505.21190). The meaning of the relevant columns is the following. The columns that are added in Lunguage++ (by our explicit and implicit uncertainty pipelines) are shown in **bold**. 
 - `idx`: index of finding-sentence pair in the report section
 - `subject_id`: subject ID, links to patients in MIMIC-CXR
 - `study_id`: study ID, links to chest x-ray studies in MIMIC-CXR
@@ -32,13 +68,12 @@ We publish Lunguage++, an expanded version of [Lunguage](https://arxiv.org/abs/2
 - **`pathway`**: diagnostic pathway that is used to expand the disease with characteristic sub-findings in our Implicit Uncertainty Framework
 - **`DxTP`**: whether the diagnosis/finding is current or in the past (if it is in the past, we should not expand it with key findings in our Implicit Uncertainty Framework)
 
-For review purposes, this dataset can be accessed through [`data_resources/Lunguage++.csv`](https://github.com/prabaey/lunguage_uncertainty/blob/main/data_resources/Lunguage%2B%2B.csv). Later, it will be made available via the proper PhysioNet channels. 
-
-We additionally publish the following resources, which can be found in the folder `data_resources`.
+We additionally publish the following resources:
 - `hedging_phrase_extracted.jsonl`: hedging phrases extracted from every finding-sentence pair in Lunguage with a tentative label (`dx_certainty = tentative`)
 - `hedging_phrase_vocab.jsonl`: vocabulary of 42 hedging phrases which occurred 10 or more times, each with an associated list of example sentences extracted from Lunguage
 - `reference_ranking.csv`: reference ranking of 42 hedging phrases, constructed by applying the TrueSkill algorithm on LLM comparisons of pairs of phrases (found in `hedging_phrase_comparisons`)
 - `dx_pathway.csv`: the expert-defined diagnostic pathways which can be used to expand diseases with their characteristic findings
+- `ranking_log`, `hedging_phrase_comparisons`, and `evaluation_study`: additional data which is used in the demonstration notebook `run_explicit_uncertainty/build_explicit_uncertainty.ipynb`. 
 
 ## Explicit Uncertainty Framework
 
@@ -50,7 +85,7 @@ To illustrate how these probabilities were obtained, we demonstrate every step o
 
 ## Implicit Uncertainty Framework
 
-The repository focuses on handling implicit uncertainty through a diagnostic pathway expansion framework. This system systematically adds characteristic sub-findings derived from expert-defined diagnostic pathways for 14 common diagnoses.
+We handle implicit uncertainty through a diagnostic pathway expansion framework. This system systematically adds characteristic sub-findings derived from expert-defined diagnostic pathways for 14 common diagnoses.
 
 ![Overview of the Implicit Uncertainty Framework with Pathway Expansion](https://github.com/prabaey/lunguage_uncertainty/blob/main/figures/pathway_overview.png)
 
@@ -61,29 +96,27 @@ To process reports using the diagnostic pathway expansion system:
 1. Navigate to the `run_pathway` directory
 2. Explore the diagnostic pathways and Lunguage++ using `run_pathway/exploration.ipynb`
 3. Run the expansion script:
-    1. Prepare required input files:
-        Note: For code review purposes, we have temporarily included the necessary files in this repository. After official review, these files should be properly obtained through PhysioNet.
-        
-        - dx_pathway.csv: Diagnostic pathway definitions for 14 common diagnoses
-        - Lunguage_vocab.csv:  Lunguage resource containing vocabulary and phrases (see [Lunguage paper](https://arxiv.org/abs/2505.21190))
-        - Lunguage_w_prob.csv: Lunguage resource with added 'prob' column for explicit uncertainty values
-        - mimic-cxr-2.0.0-metadata.csv.gz: MIMIC-CXR metadata file from [MIMIC-CXR-JPG database](https://physionet.org/content/mimic-cxr-jpg/2.1.0/) for view information matching
-    2. First install required packages by running:
+    1. Prepare required input files (via Physionet, **ur dataset is currently awaiting approval for publication by Physionet**):
+        - `data_resources/dx_pathway.csv`: Diagnostic pathway definitions for 14 common diagnoses
+        - `data_resources/lunguage/Lunguage_vocab.csv`:  Lunguage resource containing vocabulary and phrases (see [Lunguage paper](https://arxiv.org/abs/2505.21190))
+        - `data_resources/Lunguage_w_prob.csv`: Lunguage resource with added 'prob' column for explicit uncertainty values
+        - `data_resources/lunguage/mimic-cxr-2.0.0-metadata.csv`: MIMIC-CXR metadata file from [MIMIC-CXR-JPG](https://physionet.org/content/mimic-cxr/2.0.0/) for view information matching
+    2. Install required packages by running:
         ```bash
         pip install -r requirements_for_pathway.txt
         ```
 
-        Then execute the pathway expansion:
+    3. Then execute the pathway expansion:
         ```bash
         # Basic usage
         python dx_pathway.py --resolve_conflicts --save_output
 
         # With optional arguments
         python dx_pathway.py \
-            --vocab_path ./Lunguage_vocab.csv \
-            --dx_pathway_path ./dx_pathway.csv \
-            --gold_dataset_path ./Lunguage_w_prob.csv \
-            --mimic_path ./mimic_subset_over_1to15.csv \
+            --vocab_path ../data_resources/lunguage/Lunguage_vocab.csv \
+            --dx_pathway_path ../data_resources/dx_pathway.csv \
+            --gold_dataset_path ../data_resources/Lunguage_w_prob.csv \
+            --mimic_path ../data_resources/lunguage/mimic-cxr-2.0.0-metadata.csv \
             --output_dir ./output \
             --level report \  # Process at report level (integrates findings across sections) # Options: 'report' or 'section'
             --matching model \  # Use model-based similarity matching for entity/view/location # Options: 'model' or 'string'
