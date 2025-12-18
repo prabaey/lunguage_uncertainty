@@ -39,7 +39,7 @@ data_resources/
 │   ├── ranker_logs/
 │   │   └── example.csv
 │   └── rank_sentence_log.jsonl
-├── Lunguage++.csv
+├── Lunguage_plus_plus.csv
 ├── Lunguage_w_prob.csv
 ├── dx_pathway.csv
 ├── hedging_phrase_extracted.jsonl
@@ -77,7 +77,7 @@ We additionally publish the following resources:
 
 ## Explicit Uncertainty Framework
 
-In this framework, we assign a probability to every finding-sentence pair in Lunguage, following the framework in the figure below. This results in a version of Lunguage with a new column called "prob", which stores this probability for every entry. This data can be accessed through `Lunguage_w_prob.csv` on Physionet and forms the starting point for the Implicit Uncertainty Framework (see next section). It is also contained in the final Lunguage++ dataset (`Lunguage++.csv`) which can be found on Physionet.
+In this framework, we assign a probability to every finding-sentence pair in Lunguage, following the framework in the figure below. This results in a version of Lunguage with a new column called "prob", which stores this probability for every entry. This data can be accessed through `Lunguage_w_prob.csv` on Physionet and forms the starting point for the Implicit Uncertainty Framework (see next section). It is also contained in the final Lunguage++ dataset (`Lunguage_plus_plus.csv`) which can be found on Physionet.
 
 ![Overview of the explicit uncertainty framework: strategy for assigning probabilities to finding–sentence pairs with tentative certainty in the Lunguage dataset](https://github.com/prabaey/lunguage_uncertainty/blob/main/figures/explicit_uncertainty_overview.png)
 
