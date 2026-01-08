@@ -1,6 +1,9 @@
 # Lunguage++
 
-This repository provides resources for handling uncertainty in radiology reports, focusing on both explicit and implicit uncertainty. Our work addresses two key challenges in radiology report analysis:
+This repository provides resources for handling uncertainty in radiology reports, focusing on both explicit and implicit uncertainty. 
+The full paper, titled "Modeling Clinical Uncertainty in Radiology Reports: from Explicit Uncertainty Markers to Implicit Reasoning Pathways" can be found on [Arxiv](https://arxiv.org/abs/2511.04506).
+
+Our work addresses two key challenges in radiology report analysis:
 
 1. **Explicit Uncertainty**: Uncertainty directly expressed through hedging phrases in reports
 2. **Implicit Uncertainty**: Uncertainty arising from omitted findings and incomplete reasoning chains
