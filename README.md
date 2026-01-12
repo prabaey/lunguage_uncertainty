@@ -51,7 +51,7 @@ data_resources/
 </pre>
 
 The data in these folders can be downloaded from Physionet (**Our dataset is currently awaiting approval for publication by Physionet**).
-The data in `data_resources/lunguage` can be downloaded from the Physionet project for Lunguage (**The Lunguage dataset is currently awaiting approval for publication by Physionet**).
+The data in `data_resources/lunguage` can be downloaded from [Lunguage](https://physionet.org/content/lunguage/1.0.0/).
 The metadata file `mimic-cxr-2.0.0-metadata.csv` can be downloaded from [MIMIC-CXR-JPG](https://physionet.org/content/mimic-cxr/2.0.0/).
 
 What follows is a description of our dataset.
@@ -65,7 +65,7 @@ We publish Lunguage++ on Physionet, an expanded version of [Lunguage](https://ar
 - `ent`: finding that was extracted from the sentence, for which the remaining columns are structured attributes
 - **`status`**: combination of `dx_status` and `dx_certainty` from Lunguage, indicates whether the finding (`ent`) is definitive positive (dp), definitive negative (dn), tentative positive (tp), or tentative negative (tn)
 - **`prob`**: probability of the `ent` as expressed by the hedging phrases used in `sent`, quantified by our Explicit Uncertainty Framework.
-- `location`, `evidence`, `associate`, `morphology`, `distribution`, `measurement`, `severity`, `comparison`, `onset`, `no change`, `improved`, `worsened`, `placement`, `past hx`, `other source`, `assessment limitations`: attributes of finding, see [Lunguage](https://arxiv.org/abs/2505.21190) for their meaning
+- `location`, `evidence`, `associate`, `morphology`, `distribution`, `measurement`, `severity`, `comparison`, `onset`, `no change`, `improved`, `worsened`, `placement`, `past hx`, `other source`, `assessment limitations`: attributes of finding, see [Lunguage](https://physionet.org/content/lunguage/1.0.0/) for their meaning
 - `report`: the full report this sentence was extracted from
 - **`view_information`**: view of chest x-ray study and patient position, extracted from MIMIC-CXR meta-data, used to select the correct pathway in our Implicit Uncertainty Framework
 - **`pathway`**: diagnostic pathway that is used to expand the disease with characteristic sub-findings in our Implicit Uncertainty Framework
@@ -99,9 +99,9 @@ To process reports using the diagnostic pathway expansion system:
 1. Navigate to the `run_pathway` directory
 2. Explore the diagnostic pathways and Lunguage++ using `run_pathway/exploration.ipynb`
 3. Run the expansion script:
-    1. Prepare required input files (via Physionet, **ur dataset is currently awaiting approval for publication by Physionet**):
+    1. Prepare required input files (via Physionet, **our dataset is currently awaiting approval for publication by Physionet**):
         - `data_resources/dx_pathway.csv`: Diagnostic pathway definitions for 14 common diagnoses
-        - `data_resources/lunguage/Lunguage_vocab.csv`:  Lunguage resource containing vocabulary and phrases (see [Lunguage paper](https://arxiv.org/abs/2505.21190))
+        - `data_resources/lunguage/Lunguage_vocab.csv`:  Lunguage resource containing vocabulary and phrases (see [Lunguage](https://physionet.org/content/lunguage/1.0.0/))
         - `data_resources/Lunguage_w_prob.csv`: Lunguage resource with added 'prob' column for explicit uncertainty values
         - `data_resources/lunguage/mimic-cxr-2.0.0-metadata.csv`: MIMIC-CXR metadata file from [MIMIC-CXR-JPG](https://physionet.org/content/mimic-cxr/2.0.0/) for view information matching
     2. Install required packages by running:
